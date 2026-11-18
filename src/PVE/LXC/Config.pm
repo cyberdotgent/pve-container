@@ -531,8 +531,7 @@ my $confdesc = {
         optional => 1,
         type => 'string',
         enum => ['amd64', 'i386', 'arm64', 'armhf', 'riscv32', 'riscv64', 's390x'],
-        description => "OS architecture type.",
-        default => 'amd64',
+        description => "OS architecture type. Detected if unset, falling back to the host architecture.",
     },
     ostype => {
         optional => 1,

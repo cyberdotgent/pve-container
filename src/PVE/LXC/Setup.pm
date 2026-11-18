@@ -154,7 +154,7 @@ sub new {
         }
 
         if (!$arch) {
-            $arch = 'amd64';
+            $arch = PVE::Tools::get_host_dpkg_arch();
             print "Falling back to $arch.\nUse `pct set VMID --arch ARCH` to change.\n";
         } else {
             print "Detected container architecture: $arch\n";
