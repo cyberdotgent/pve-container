@@ -171,6 +171,7 @@ sub detect_elf_architecture {
         0x28 => 'armhf',
         0xb7 => 'arm64',
         0xf3 => 'riscv',
+        0x16 => 's390x',
     };
 
     my $detect_arch = sub {
@@ -179,11 +180,14 @@ sub detect_elf_architecture {
 
         my $length = read($fh, my $data, 20) or die "read failed: $!\n";
 
-        # 4 bytes ELF magic number and 1 byte ELF class, padding, machine
-        my ($magic, $class, undef, $machine) = unpack("A4CA12n", $data);
+        # 4 bytes ELF magic number, 1 byte ELF class, 1 byte data encoding
+        my ($magic, $class, $endian) = unpack("A4CC", $data);
 
         die "'$elf_fn' does not resolve to an ELF!\n"
             if (!defined($class) || !defined($magic) || $magic ne "\177ELF");
+
+        # e_machine at offset 18 is in the ELF's byte order, big-endian (2) on s390x
+        my $machine = unpack($endian == 2 ? "x18n" : "x18v", $data);
 
         my $arch = $supported_elf_machine->{$machine};
         die "'$elf_fn' has unknown ELF machine '$machine'!\n"
