@@ -1,3 +1,15 @@
+pve-container (6.1.24+s390x1) trixie; urgency=medium
+
+  * s390x port, rebased onto 6.1.24:
+    - allow s390x containers (arch enum, ELF machine 0x16) and read the ELF
+      machine field in the binary byte order, so that architecture detection
+      works for big-endian s390x templates.
+    - if the container architecture cannot be detected, fall back to the
+      host Debian architecture instead of amd64 (Depends libpve-common-perl
+      >= 9.2.10 for get_host_dpkg_arch).
+
+ -- Yvan Janssens <yvanj@cyber.gent>  Fri, 20 Nov 2026 14:17:13 +0100
+
 pve-container (6.1.24) trixie; urgency=medium
 
   * migration: check that the target node can parse the container config
